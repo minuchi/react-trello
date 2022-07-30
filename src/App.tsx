@@ -5,7 +5,11 @@ import { theme } from './theme';
 import ToDoList from './ToDoList';
 
 const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
   ${reset}
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
 `;
 
 function App() {

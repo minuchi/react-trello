@@ -1,8 +1,8 @@
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DraggableId, DropResult } from 'react-beautiful-dnd';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { toDoListState } from './atoms';
-import ToDo from './ToDo';
+import Board from './Board';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,21 +14,77 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const Boards = styled.div``;
-
-const Board = styled.ul`
-  background-color: ${(props) => props.theme.boardColor};
-  padding: 1rem 1rem 0.5rem;
-  border-radius: 0.5rem;
+const Boards = styled.div`
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 function ToDoList() {
   const [toDos, setToDos] = useRecoilState(toDoListState);
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    if (destination != null && source.index !== destination.index) {
-      const newToDos = toDos.filter((_, i) => source.index !== i);
-      newToDos.splice(destination.index, 0, toDos[source.index]);
-      setToDos(newToDos);
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (destination != null) {
+      const sDroppableId = source.droppableId;
+      const dDroppableId = destination.droppableId;
+      const sIdx = source.index;
+      const dIdx = destination.index;
+
+      if (sDroppableId === dDroppableId && sIdx === dIdx) {
+        return;
+      }
+
+      /*
+       if (sDroppableId === dDroppableId) {
+        setToDos((currToDos) => {
+          const newToDos = [...currToDos[sDroppableId]];
+          newToDos.splice(sIdx, 1);
+          newToDos.splice(dIdx, 0, currToDos[sDroppableId][sIdx]);
+
+          return {
+            ...currToDos,
+            [sDroppableId]: newToDos,
+          };
+        });
+      } else {
+        setToDos((currToDos) => {
+          const sourceToDos = [...currToDos[sDroppableId]];
+          const destToDos = [...currToDos[dDroppableId]];
+          sourceToDos.splice(sIdx, 1);
+          destToDos.splice(dIdx, 0, currToDos[sDroppableId][sIdx]);
+
+          return {
+            ...currToDos,
+            [sDroppableId]: sourceToDos,
+            [dDroppableId]: destToDos,
+          };
+        });
+      }
+      */
+
+      setToDos((currToDos) => {
+        const sourceToDos = currToDos[sDroppableId].filter(
+          (_, i) => sIdx !== i,
+        );
+
+        let newToDos = {
+          ...currToDos,
+          [sDroppableId]: sourceToDos,
+        };
+
+        const destToDos =
+          sDroppableId === dDroppableId
+            ? sourceToDos
+            : [...currToDos[dDroppableId]];
+        destToDos.splice(dIdx, 0, currToDos[sDroppableId][sIdx]);
+
+        newToDos = {
+          ...newToDos,
+          [dDroppableId]: destToDos,
+        };
+
+        return newToDos;
+      });
     }
   };
 
@@ -36,18 +92,9 @@ function ToDoList() {
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(provided) => (
-              <Board ref={provided.innerRef} {...provided.droppableProps}>
-                {toDos.map((value, index) => (
-                  <ToDo draggableId={value} index={index} key={value}>
-                    {value}
-                  </ToDo>
-                ))}
-                {provided.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(toDos).map((id) => (
+            <Board key={id} droppableId={id} toDos={toDos[id]} />
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>
