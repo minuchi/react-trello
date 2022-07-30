@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
@@ -12,7 +12,7 @@ const Card = styled.li`
   background-color: ${(props) => props.theme.cardColor};
   padding: 1rem;
   border-radius: 0.5rem;
-  margin: 0.5rem 0;
+  margin: 0 0 0.5rem;
   min-width: 10rem;
 `;
 
@@ -32,4 +32,4 @@ function ToDo({ draggableId, index, children }: ToDoProps) {
   );
 }
 
-export default ToDo;
+export default React.memo(ToDo);

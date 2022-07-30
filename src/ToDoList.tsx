@@ -1,5 +1,7 @@
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { toDoListState } from './atoms';
 import ToDo from './ToDo';
 
 const Wrapper = styled.div`
@@ -7,7 +9,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${(props) => props.theme.backgroundColor};
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   margin: 0 auto;
 `;
@@ -16,12 +18,19 @@ const Boards = styled.div``;
 
 const Board = styled.ul`
   background-color: ${(props) => props.theme.boardColor};
-  padding: 0.5rem 1rem;
+  padding: 1rem 1rem 0.5rem;
   border-radius: 0.5rem;
 `;
 
 function ToDoList() {
-  const onDragEnd = (result: DropResult) => {};
+  const [toDos, setToDos] = useRecoilState(toDoListState);
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (destination != null && source.index !== destination.index) {
+      const newToDos = toDos.filter((_, i) => source.index !== i);
+      newToDos.splice(destination.index, 0, toDos[source.index]);
+      setToDos(newToDos);
+    }
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -30,12 +39,11 @@ function ToDoList() {
           <Droppable droppableId="one">
             {(provided) => (
               <Board ref={provided.innerRef} {...provided.droppableProps}>
-                <ToDo draggableId="first" index={0}>
-                  One
-                </ToDo>
-                <ToDo draggableId="two" index={1}>
-                  Two
-                </ToDo>
+                {toDos.map((value, index) => (
+                  <ToDo draggableId={value} index={index} key={value}>
+                    {value}
+                  </ToDo>
+                ))}
                 {provided.placeholder}
               </Board>
             )}
