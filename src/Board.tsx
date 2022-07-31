@@ -1,12 +1,13 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import { ToDoState } from './atoms';
 import CreateToDo from './CreateToDo';
 import ToDo from './ToDo';
 
 interface BoardProps {
   droppableId: string;
-  toDos: string[];
+  toDos: ToDoState[];
 }
 
 const Wrapper = styled.ul`
@@ -38,11 +39,12 @@ const Container = styled.div<ContainerProps>`
   flex-grow: 1;
   background-color: ${(props) =>
     props.isDraggingOver
-      ? '#dfe6e9'
+      ? '#edf0f7'
       : props.isDraggingFromThis
       ? '#b2bec3'
       : 'transparent'};
   transition: background-color 0.2s linear;
+  border-radius: 0 0 0.5rem 0.5rem;
 `;
 
 function Board({ droppableId, toDos }: BoardProps) {
@@ -58,9 +60,9 @@ function Board({ droppableId, toDos }: BoardProps) {
             isDraggingFromThis={!!snapshot.draggingFromThisWith}
             {...provided.droppableProps}
           >
-            {toDos.map((value, index) => (
-              <ToDo draggableId={value} index={index} key={value}>
-                {value}
+            {toDos.map((toDo, index) => (
+              <ToDo draggableId={toDo.id} index={index} key={toDo.id}>
+                {toDo.text}
               </ToDo>
             ))}
             {provided.placeholder}
