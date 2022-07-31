@@ -1,6 +1,7 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import CreateToDo from './CreateToDo';
 import ToDo from './ToDo';
 
 interface BoardProps {
@@ -48,6 +49,7 @@ function Board({ droppableId, toDos }: BoardProps) {
   return (
     <Wrapper>
       <Title>{droppableId}</Title>
+      <CreateToDo droppableId={droppableId} />
       <Droppable droppableId={droppableId}>
         {(provided, snapshot) => (
           <Container
