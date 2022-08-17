@@ -1,11 +1,13 @@
-import { DragDropContext, DraggableId, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { toDoListState } from './atoms';
 import Board from './Board';
+import CreateCategory from './CreateCategory';
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: ${(props) => props.theme.backgroundColor};
@@ -18,6 +20,7 @@ const Boards = styled.div`
   display: grid;
   gap: 0.625rem;
   grid-template-columns: repeat(3, 1fr);
+  padding-bottom: 1rem;
 `;
 
 function ToDoList() {
@@ -96,6 +99,7 @@ function ToDoList() {
             <Board key={id} droppableId={id} toDos={toDos[id]} />
           ))}
         </Boards>
+        <CreateCategory />
       </Wrapper>
     </DragDropContext>
   );
