@@ -3,6 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { toDoListState } from './atoms';
 import { Button, Form, Input } from './components/Form';
+import { saveToDos } from './utils/localStorage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,7 +34,10 @@ function CreateCategory() {
     }
 
     setToDos((data) => {
-      return { ...data, [category]: [] };
+      const newData = { ...data, [category]: [] };
+      saveToDos(newData);
+
+      return newData;
     });
 
     setCategory('');

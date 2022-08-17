@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { toDoListState } from './atoms';
 import Board from './Board';
 import CreateCategory from './CreateCategory';
+import { saveToDos } from './utils/localStorage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -85,6 +86,8 @@ function ToDoList() {
           ...newToDos,
           [dDroppableId]: destToDos,
         };
+
+        saveToDos(newToDos);
 
         return newToDos;
       });

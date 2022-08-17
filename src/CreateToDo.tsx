@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { toDoListState } from './atoms';
 import { Button, Form, Input } from './components/Form';
+import { saveToDos } from './utils/localStorage';
 
 const Wrapper = styled.div``;
 
@@ -27,7 +28,7 @@ function CreateToDo({ droppableId }: CreateToDoProps) {
     }
 
     setToDos((toDos) => {
-      return {
+      const newTodos = {
         ...toDos,
         [droppableId]: [
           {
@@ -37,6 +38,10 @@ function CreateToDo({ droppableId }: CreateToDoProps) {
           ...toDos[droppableId],
         ],
       };
+
+      saveToDos(newTodos);
+
+      return newTodos;
     });
 
     setToDo('');

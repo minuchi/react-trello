@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { getInitialToDos } from './utils/localStorage';
 
 export interface ToDoState {
   id: string;
@@ -11,9 +12,5 @@ export interface ToDoListState {
 
 export const toDoListState = atom<ToDoListState>({
   key: 'toDos',
-  default: {
-    'To Do': [],
-    Doing: [],
-    Done: [],
-  },
+  default: getInitialToDos(),
 });
