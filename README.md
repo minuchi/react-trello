@@ -2,5 +2,4 @@
 
 ## To Dos
 
-- [ ] Delete a To Do
 - [ ] Reorder boards

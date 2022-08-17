@@ -1,9 +1,11 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { ToDoState } from './atoms';
+import { toDoListState, ToDoState } from './atoms';
 import CreateToDo from './CreateToDo';
 import ToDo from './ToDo';
+import { saveToDos } from './utils/localStorage';
 
 interface BoardProps {
   droppableId: string;
@@ -48,6 +50,20 @@ const Container = styled.div<ContainerProps>`
 `;
 
 function Board({ droppableId, toDos }: BoardProps) {
+  const setToDos = useSetRecoilState(toDoListState);
+  const remove = (id: string) => {
+    setToDos((oldToDos) => {
+      const newToDos = {
+        ...oldToDos,
+        [droppableId]: oldToDos[droppableId].filter((toDo) => toDo.id !== id),
+      };
+
+      saveToDos(newToDos);
+
+      return newToDos;
+    });
+  };
+
   return (
     <Wrapper>
       <Title>{droppableId}</Title>
@@ -61,7 +77,12 @@ function Board({ droppableId, toDos }: BoardProps) {
             {...provided.droppableProps}
           >
             {toDos.map((toDo, index) => (
-              <ToDo draggableId={toDo.id} index={index} key={toDo.id}>
+              <ToDo
+                draggableId={toDo.id}
+                index={index}
+                key={toDo.id}
+                remove={() => remove(toDo.id)}
+              >
                 {toDo.text}
               </ToDo>
             ))}
