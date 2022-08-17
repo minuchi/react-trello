@@ -1,6 +1,6 @@
 import { RecoilRoot } from 'recoil';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import reset from 'styled-reset';
+import reset from './utils/styled-reset';
 import { theme } from './theme';
 import ToDoList from './ToDoList';
 
