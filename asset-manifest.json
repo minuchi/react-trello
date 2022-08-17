@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "https://minuchi.github.io/react-trello/static/js/main.0b10ddf6.js",
+    "static/js/787.d338e2d6.chunk.js": "https://minuchi.github.io/react-trello/static/js/787.d338e2d6.chunk.js",
+    "index.html": "https://minuchi.github.io/react-trello/index.html",
+    "main.0b10ddf6.js.map": "https://minuchi.github.io/react-trello/static/js/main.0b10ddf6.js.map",
+    "787.d338e2d6.chunk.js.map": "https://minuchi.github.io/react-trello/static/js/787.d338e2d6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.0b10ddf6.js"
+  ]
+}
